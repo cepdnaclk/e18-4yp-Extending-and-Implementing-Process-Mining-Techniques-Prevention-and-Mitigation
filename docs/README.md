@@ -3,24 +3,27 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: eYY-4yp-project-template
-title:
+repository-name: e18-4yp-Extending-and-Implementing-Process-Mining-Techniques-Prevention-and-Mitigation
+title: Extending and Implementing Process Mining Techniques Improving Data Quality - Prevention and Mitigation
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Project Title
+# Extending and Implementing Process Mining Techniques Improving Data Quality - Prevention and Mitigation
 
 #### Team
 
-- eNumber, Name, [email](mailto:name@email.com)
-- eNumber, Name, [email](mailto:name@email.com)
-- eNumber, Name, [email](mailto:name@email.com)
+- E/18/010, Abeywickrama A.K.D.A.S., [email](mailto:e18010@eng.pdn.ac.lk)
+- E/18/156, Jayathilake W.A.T.N., [email](mailto:e18156@eng.pdn.ac.lk)
+- E/18/329, Sewwandi D.W.S.N., [email](mailto:e18329@eng.pdn.ac.lk)
 
 #### Supervisors
-
-- Name, [email](mailto:name@eng.pdn.ac.lk)
-- Name, [email](mailto:name@eng.pdn.ac.lk)
+ 
+- Prof. Roshan G. Ragel, [email](mailto:roshanr@eng.pdn.ac.lk)
+- Dr. Asitha Bandaranayake, [email](mailto:asithab@eng.pdn.ac.lk)
+- Dr. Damayanthi Herath, [email](mailto:damayanthiherath@eng.pdn.ac.lk)
+- Prof. Athur ter Hofstede, [email](mailto:a.terhofstede@qut.edu.au)
+- Dr. Chathura Ekanayake, [email](mailto:chathura@wso2.com)
 
 #### Table of content
 
@@ -68,8 +71,8 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 [//]: # ( NOTE: EDIT THIS LINKS WITH YOUR REPO DETAILS )
 
-- [Project Repository](https://github.com/cepdnaclk/repository-name)
-- [Project Page](https://cepdnaclk.github.io/repository-name)
+- [Project Repository](https://github.com/cepdnaclk/e18-4yp-Extending-and-Implementing-Process-Mining-Techniques-Prevention-and-Mitigation)
+- [Project Page](https://cepdnaclk.github.io/e18-4yp-Extending-and-Implementing-Process-Mining-Techniques-Prevention-and-Mitigation)
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
 - [University of Peradeniya](https://eng.pdn.ac.lk/)
 
