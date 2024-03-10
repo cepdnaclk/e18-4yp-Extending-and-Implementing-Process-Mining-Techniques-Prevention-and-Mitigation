@@ -80,15 +80,15 @@ This project contributes to improving process-data quality for process mining by
 <!-- 3. [Semester 8 report](./) -->
 <!-- 4. [Semester 8 slides](./) -->
 <!-- 5. Author 1, Author 2 and Author 3 "Research paper title" (2021). [PDF](./). -->
-1. [Semester 7 report](./https://drive.google.com/file/d/1kZQn7F9XBBUq6D0MsOg-i9yXMTNZzutr/view?usp=sharing)
-2. [Semester 7 slides](./https://drive.google.com/file/d/1U8VDfEbv2PaztlMW1Vl1rWmWKHsdNkMh/view?usp=sharing)
-3. Suriadi Suriadi, Robert Andrews, Arthur H. M. ter Hofstede and Moe Thandar Wynn "Event log imperfection patterns for process mining: Towards a systematic approach to cleaning event logs. Information Systems, 64:132–150" (2017). [SAtHW17](./https://drive.google.com/file/d/1QzvOtoso2kMy3a9pgV5bukuGY7JlP6OB/view?usp=sharing).
+1. [Semester 7 report](https://drive.google.com/file/d/1kZQn7F9XBBUq6D0MsOg-i9yXMTNZzutr/view?usp=sharing)
+2. [Semester 7 slides](https://drive.google.com/file/d/1U8VDfEbv2PaztlMW1Vl1rWmWKHsdNkMh/view?usp=sharing)
+3. Suriadi Suriadi, Robert Andrews, Arthur H. M. ter Hofstede and Moe Thandar Wynn "Event log imperfection patterns for process mining: Towards a systematic approach to cleaning event logs. Information Systems, 64:132–150" (2017). [SAtHW17](https://drive.google.com/file/d/1QzvOtoso2kMy3a9pgV5bukuGY7JlP6OB/view?usp=sharing).
 
-4. Sareh Sadeghianasl, Arthur H. M. ter Hofstede, Moe Thandar Wynn, and Suriadi Suriadi " A contextual approach to detecting synonymous and polluted activity labels in process event logs." (2019). [StHWS19](./https://drive.google.com/file/d/18P85017_vKgDZkjwrmG35h5XPtW79RmI/view?usp=sharing).
+4. Sareh Sadeghianasl, Arthur H. M. ter Hofstede, Moe Thandar Wynn, and Suriadi Suriadi " A contextual approach to detecting synonymous and polluted activity labels in process event logs." (2019). [StHWS19](https://drive.google.com/file/d/18P85017_vKgDZkjwrmG35h5XPtW79RmI/view?usp=sharing).
 
-5. Fahame Emamjome, Robert Andrews, Arthur H. M. ter Hofstede, and Hajo A. Reijers. "Alohomora: Unlocking data quality causes through event log context." (2020). [EAtHR20](./https://drive.google.com/file/d/18Jnk5VWdSqP6WEvAhgC8GCFHs7hz8RVr/view?usp=sharing).
+5. Fahame Emamjome, Robert Andrews, Arthur H. M. ter Hofstede, and Hajo A. Reijers. "Alohomora: Unlocking data quality causes through event log context." (2020). [EAtHR20](https://drive.google.com/file/d/18Jnk5VWdSqP6WEvAhgC8GCFHs7hz8RVr/view?usp=sharing).
 
-6. Robert Andrews, Fahame Emamjome, Arthur H.M. ter Hofstede, and Hajo A. Reijers. "Root-cause analysis of process-data quality problems. Journal of Business Analytics, 5(5):51–75" (2022). [AEtHR22](./https://drive.google.com/file/d/1lDMO8tp47HinIfBtX-A-SCfBErkKJ8Qh/view?usp=sharing).
+6. Robert Andrews, Fahame Emamjome, Arthur H.M. ter Hofstede, and Hajo A. Reijers. "Root-cause analysis of process-data quality problems. Journal of Business Analytics, 5(5):51–75" (2022). [AEtHR22](https://drive.google.com/file/d/1lDMO8tp47HinIfBtX-A-SCfBErkKJ8Qh/view?usp=sharing).
 
  
 ## Links
