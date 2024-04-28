@@ -25,6 +25,6 @@ public enum PluginGroup {
     READERS,
     WRITERS,
     PATTERNS,
-    ACTIONS
-    
+    ACTIONS,
+    ROOTCAUSE
 }

@@ -20,6 +20,7 @@ import com.processdataquality.praeclarus.action.AbstractAction;
 import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.reader.AbstractDataReader;
 import com.processdataquality.praeclarus.writer.AbstractDataWriter;
+import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
 
 /**
  * @author Michael Adams
@@ -27,25 +28,35 @@ import com.processdataquality.praeclarus.writer.AbstractDataWriter;
  */
 public class PluginService {
 
-    private static final PluginFactory<AbstractDataReader> READER_FACTORY =
-            new PluginFactory<>(AbstractDataReader.class);
-    private static final PluginFactory<AbstractDataWriter> WRITER_FACTORY =
-            new PluginFactory<>(AbstractDataWriter.class);
-    private static final PluginFactory<AbstractDataPattern> PATTERN_FACTORY =
-            new PluginFactory<>(AbstractDataPattern.class);
-    private static final PluginFactory<AbstractAction> ACTION_FACTORY =
-            new PluginFactory<>(AbstractAction.class);
+    private static final PluginFactory<AbstractDataReader> READER_FACTORY = new PluginFactory<>(
+            AbstractDataReader.class);
+    private static final PluginFactory<AbstractDataWriter> WRITER_FACTORY = new PluginFactory<>(
+            AbstractDataWriter.class);
+    private static final PluginFactory<AbstractDataPattern> PATTERN_FACTORY = new PluginFactory<>(
+            AbstractDataPattern.class);
+    private static final PluginFactory<AbstractAction> ACTION_FACTORY = new PluginFactory<>(AbstractAction.class);
+    private static final PluginFactory<AbstractRootCause> ROOT_FACTORY = new PluginFactory<>(AbstractRootCause.class);
 
+    public static PluginFactory<AbstractDataReader> readers() {
+        return READER_FACTORY;
+    }
 
-    public static PluginFactory<AbstractDataReader> readers() { return READER_FACTORY; }
+    public static PluginFactory<AbstractDataWriter> writers() {
+        return WRITER_FACTORY;
+    }
 
-    public static PluginFactory<AbstractDataWriter> writers() { return WRITER_FACTORY; }
+    public static PluginFactory<AbstractDataPattern> patterns() {
+        return PATTERN_FACTORY;
+    }
 
-    public static PluginFactory<AbstractDataPattern> patterns() { return PATTERN_FACTORY; }
+    public static PluginFactory<AbstractAction> actions() {
+        return ACTION_FACTORY;
+    }
 
-    public static PluginFactory<AbstractAction> actions() { return ACTION_FACTORY; }
+    public static PluginFactory<AbstractRootCause> rootCauseAnalyzers() {
+        return ROOT_FACTORY;
+    }
 
-    
     public static PluginFactory<? extends AbstractPlugin> factory(Class<? extends AbstractPlugin> clazz) {
         if (AbstractDataReader.class.isAssignableFrom(clazz)) {
             return READER_FACTORY;
@@ -58,6 +69,9 @@ public class PluginService {
         }
         if (AbstractAction.class.isAssignableFrom(clazz)) {
             return ACTION_FACTORY;
+        }
+        if (AbstractRootCause.class.isAssignableFrom(clazz)) {
+            return ROOT_FACTORY;
         }
         return null;
     }

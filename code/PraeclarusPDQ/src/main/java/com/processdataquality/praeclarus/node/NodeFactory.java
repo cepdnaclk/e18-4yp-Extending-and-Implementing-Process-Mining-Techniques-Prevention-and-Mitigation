@@ -21,6 +21,7 @@ import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.reader.DataReader;
 import com.processdataquality.praeclarus.writer.DataWriter;
+import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
 
 import java.util.UUID;
 
@@ -37,7 +38,6 @@ public class NodeFactory {
         return create(plugin, UUID.randomUUID().toString());
     }
 
-
     // called when restoring a node in a saved workflow
     public static Node create(AbstractPlugin plugin, String id) {
         plugin.setID(id);
@@ -53,6 +53,9 @@ public class NodeFactory {
         }
         if (plugin instanceof AbstractAction) {
             node = new ActionNode(plugin);
+        }
+        if (plugin instanceof AbstractRootCause) {
+            node = new ReaderNode(plugin);
         }
 
         return node;

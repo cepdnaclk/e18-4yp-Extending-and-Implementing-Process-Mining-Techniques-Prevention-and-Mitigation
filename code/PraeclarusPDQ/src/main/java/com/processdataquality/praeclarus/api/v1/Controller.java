@@ -113,6 +113,11 @@ public class Controller {
         return summarisePlugins(array, "actions");
     }
 
+    @GetMapping("/rootCauseAnalyzers")
+    String findAllRoots() {
+        JsonArray array = new PluginJsonizer().jsonize(PluginService.rootCauseAnalyzers());
+        return summarisePlugins(array, "rootCauseAnalyzers");
+    }
 
     @GetMapping("/patterns")
     String findAllPatterns() {

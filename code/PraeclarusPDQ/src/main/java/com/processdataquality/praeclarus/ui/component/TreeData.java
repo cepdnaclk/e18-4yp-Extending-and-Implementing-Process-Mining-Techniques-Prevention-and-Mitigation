@@ -33,7 +33,9 @@ public class TreeData {
 
     private final List<TreeItem> itemList = createItemList();
 
-    public List<TreeItem> getItems() { return itemList; }
+    public List<TreeItem> getItems() {
+        return itemList;
+    }
 
     public List<TreeItem> getRootItems() {
         return itemList.stream()
@@ -47,11 +49,9 @@ public class TreeData {
                 .collect(Collectors.toList());
     }
 
-
     public boolean isLeaf(TreeItem item) {
         return getChildItems(item).isEmpty();
     }
-
 
     private List<TreeItem> createItemList() {
         List<TreeItem> list = new ArrayList<>();
@@ -61,32 +61,32 @@ public class TreeData {
         TreeItem patterns = new TreeItem("Patterns");
         TreeItem actions = new TreeItem("Actions");
         TreeItem writers = new TreeItem("Writers");
+        TreeItem rootCauseAnalyzers = new TreeItem("RootCauseAnalyzers");
         list.add(readers);
         list.add(patterns);
         list.add(actions);
         list.add(writers);
+        list.add(rootCauseAnalyzers);
 
         // create menu items
         list.addAll(createItems(PluginService.readers(), readers));
         list.addAll(createItems(PluginService.actions(), actions));
         list.addAll(createPatternItems(PluginService.patterns(), patterns));
         list.addAll(createItems(PluginService.writers(), writers));
+        list.addAll(createItems(PluginService.rootCauseAnalyzers(), rootCauseAnalyzers));
 
         return list;
     }
 
-    
     private List<TreeItem> createItems(PluginFactory<?> factory, TreeItem parent) {
         List<TreeItem> items = new ArrayList<>();
         for (String name : factory.getPluginClassNames()) {
             Plugin metaData = factory.getPluginAnnotation(name);
-            String label = metaData != null ? metaData.name() :
-                    name.substring(name.lastIndexOf('.'));
+            String label = metaData != null ? metaData.name() : name.substring(name.lastIndexOf('.'));
             items.add(new TreeItem(label, parent, name));
         }
         return sort(items);
     }
-
 
     private List<TreeItem> createPatternItems(PluginFactory<?> factory, TreeItem patterns) {
         List<TreeItem> items = new ArrayList<>();
@@ -97,8 +97,7 @@ public class TreeData {
             if (patternList.isEmpty()) {
                 TreeItem groupItem = getGroupItem(PatternGroup.UNGROUPED, patterns, items, patternMap);
                 items.add(newPatternItem(pluginMetaData, name, groupItem));
-            }
-            else {
+            } else {
                 for (Pattern pattern : patternList) {
                     TreeItem groupItem = getGroupItem(pattern.group(), patterns, items, patternMap);
                     items.add(newPatternItem(pluginMetaData, name, groupItem));
@@ -109,16 +108,14 @@ public class TreeData {
         return sort(items);
     }
 
-
     private List<TreeItem> sort(List<TreeItem> items) {
         items.sort(Comparator.comparing(TreeItem::getLabel));
         return items;
     }
 
-
     // get or add sub-header for pattern group
     private TreeItem getGroupItem(PatternGroup group, TreeItem patterns, List<TreeItem> items,
-                   Map<PatternGroup, TreeItem> patternMap) {
+            Map<PatternGroup, TreeItem> patternMap) {
         TreeItem groupItem = patternMap.get(group);
         if (groupItem == null) {
             groupItem = new TreeItem(group.getName(), patterns, null);
@@ -128,11 +125,9 @@ public class TreeData {
         return groupItem;
     }
 
-
     private TreeItem newPatternItem(Plugin metaData, String name, TreeItem groupItem) {
-        String label = metaData != null ? metaData.name() :
-                name.substring(name.lastIndexOf('.'));
-       return new TreeItem(label, groupItem, name);
+        String label = metaData != null ? metaData.name() : name.substring(name.lastIndexOf('.'));
+        return new TreeItem(label, groupItem, name);
     }
 
 }
