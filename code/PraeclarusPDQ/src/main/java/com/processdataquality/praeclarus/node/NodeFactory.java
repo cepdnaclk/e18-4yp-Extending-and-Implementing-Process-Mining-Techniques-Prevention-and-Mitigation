@@ -55,7 +55,7 @@ public class NodeFactory {
             node = new ActionNode(plugin);
         }
         if (plugin instanceof AbstractRootCause) {
-            node = new ReaderNode(plugin);
+            node = new RootCauseAnalyzerNode(plugin);
         }
 
         return node;

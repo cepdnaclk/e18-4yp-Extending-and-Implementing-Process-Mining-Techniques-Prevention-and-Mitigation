@@ -20,6 +20,7 @@ import com.processdataquality.praeclarus.exception.NodeRunnerException;
 import com.processdataquality.praeclarus.logging.EventLogger;
 import com.processdataquality.praeclarus.logging.EventType;
 import com.processdataquality.praeclarus.node.*;
+import com.processdataquality.praeclarus.ui.component.announce.Announcement;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -139,9 +140,14 @@ public class GraphRunner implements NodeStateChangeListener {
         try {
             // check all previous have completed
             if (node.hasCompleted()) {
+                Announcement.success("---------hiii");
+
                 runNext(node);
             }
+
             else if (completeAllPrevious(node)) {
+                Announcement.success("hi----------ii");
+
                 start(node);
             }
         }
@@ -181,6 +187,8 @@ public class GraphRunner implements NodeStateChangeListener {
     private void start(Node node) throws Exception {
         node.addStateListener(this);
         node.runPreTask();
+        Announcement.success("BYE");
+
         node.run();
     }
 
@@ -283,6 +291,13 @@ public class GraphRunner implements NodeStateChangeListener {
                         node.getStopWatch().getLastDurationAsSeconds());
             }
         }
+        if (node instanceof RootCauseAnalyzerNode) {
+            if (eventType == EventType.NODE_COMPLETED) {
+                return getLogComment("loaded",1,
+                        node.getStopWatch().getDurationAsSeconds());
+            }
+        }
+
         return null;
     }
 

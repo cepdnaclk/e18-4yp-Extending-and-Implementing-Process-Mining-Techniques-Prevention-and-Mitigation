@@ -34,18 +34,18 @@ public class CommonAnalyzerOptions {
     public Map<String, Object> toMap() {
 
         // create dummy source so we can build a default ReadOptions
-        Source source = new Source(new File("temp.csv"), StandardCharsets.UTF_8);
-        ReadOptions options = CsvReadOptions.builder(source).build();
+        // Source source = new Source(new File("temp.csv"), StandardCharsets.UTF_8);
+        // ReadOptions options = CsvReadOptions.builder(source).build();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("Missing Value", options.missingValueIndicators());
-        map.put("Date Format", options.dateFormatter());
-        map.put("DateTime Format", options.dateTimeFormatter());
-        map.put("Time Format", options.timeFormatter());
-        map.put("Header", options.header());
-        map.put("Table Name", options.tableName());
-        map.put("Sample", options.sample());
-        map.put("Locale", options.locale());
+        // map.put("Missing Value", options.missingValueIndicators());
+        // map.put("Date Format", options.dateFormatter());
+        // map.put("DateTime Format", options.dateTimeFormatter());
+        // map.put("Time Format", options.timeFormatter());
+        // map.put("Header", options.header());
+        // map.put("Table Name", options.tableName());
+        // map.put("Sample", options.sample());
+        // map.put("Locale", options.locale());
         return map;
     }
 
