@@ -38,13 +38,13 @@ public class DistortedLabelAnalyzer extends AbstractRootCause {
 
     protected JsonReadOptions getReadOptions() throws InvalidOptionValueException {
         return JsonReadOptions.builder(getSource())
-                .missingValueIndicator(getOptions().get("Missing Value").asString())
-//                .dateFormat(DateTimeFormatter.ofPattern((String) _options.get("Date Format")))
-//                .timeFormat(DateTimeFormatter.ofPattern((String) _options.get("Time Format")))
-//                .dateTimeFormat(DateTimeFormatter.ofPattern((String) _options.get("DateTime Format")))
-                .header(getOptions().get("Header").asBoolean())
-                .tableName(getOptions().get("Table Name").asString())
-                .sample(getOptions().get("Sample").asInt() > 0)
+//                 .missingValueIndicator(getOptions().get("Missing Value").asString())
+// //                .dateFormat(DateTimeFormatter.ofPattern((String) _options.get("Date Format")))
+// //                .timeFormat(DateTimeFormatter.ofPattern((String) _options.get("Time Format")))
+// //                .dateTimeFormat(DateTimeFormatter.ofPattern((String) _options.get("DateTime Format")))
+//                 .header(getOptions().get("Header").asBoolean())
+//                 .tableName(getOptions().get("Table Name").asString())
+//                 .sample(getOptions().get("Sample").asInt() > 0)
                 .build();
     }
 
