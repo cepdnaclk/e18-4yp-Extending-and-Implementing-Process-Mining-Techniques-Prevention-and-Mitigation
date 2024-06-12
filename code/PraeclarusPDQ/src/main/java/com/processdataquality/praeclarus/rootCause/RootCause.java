@@ -22,6 +22,8 @@ import tech.tablesaw.io.Source;
 
 import java.io.IOException;
 
+import com.processdataquality.praeclarus.plugin.uitemplate.PluginUI;
+
 /**
  * @author Michael Adams
  * @date 29/3/21
@@ -33,19 +35,36 @@ public interface RootCause {
      * @return the filled Table object
      * @throws IOException if anything goes wrong
      */
-    Table read() throws IOException;
+    // Table read() throws IOException;
 
+
+    // /**
+    //  * Sets the input source for this reader
+    //  * @param source A tablesaw Source (may reference a File, InputStream, etc.)
+    //  */
+    // void setSource(Source source);
+
+
+    // /**
+    //  * @return the currently set input data source (if any)
+    //  */
+    // Source getSource();
 
     /**
-     * Sets the input source for this reader
-     * @param source A tablesaw Source (may reference a File, InputStream, etc.)
+     * Allows plugin to define its own UI (as a template to be instantiated by the
+     * front end)
+     * 
+     * @return the UI template
      */
-    void setSource(Source source);
-
+    PluginUI getUI();
 
     /**
-     * @return the currently set input data source (if any)
+     * Returns the UI updated with any changes made in the front end
+     * 
+     * @param ui the updated UI template
      */
-    Source getSource();
+    void setUI(PluginUI ui);
     
 }
+
+

@@ -19,6 +19,9 @@ package com.processdataquality.praeclarus.node;
 import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.plugin.uitemplate.PluginUI;
+import com.processdataquality.praeclarus.ui.component.announce.Announcement;
+
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
 /**
@@ -29,13 +32,11 @@ import tech.tablesaw.api.Table;
  */
 public class PatternNode extends Node {
 
-    private Table detected;                 // a table of pattern matches
-
+    private Table detected; // a table of pattern matches
 
     public PatternNode(AbstractPlugin plugin) {
         super(plugin);
     }
-
 
     /**
      * Gets incoming data from a predecessor node and either detects or repairs,
@@ -45,14 +46,24 @@ public class PatternNode extends Node {
     public void run() throws Exception {
         AbstractDataPattern imperfectionPattern = (AbstractDataPattern) getPlugin();
         imperfectionPattern.getInputs().addAll(getInputs());
-        Table master = getInputs().get(0);         // first input is the master
+        Table master = getInputs().get(0); // first input is the master
         if (getState() == NodeState.UNSTARTED && imperfectionPattern.canDetect()) {
 
             // load plugin with all incoming plugins' aux datasets
             imperfectionPattern.getAuxiliaryDatasets().putAll(getAuxiliaryInputs());
-            
+
             setState(NodeState.EXECUTING);
+            
             detected = imperfectionPattern.detect(master);
+
+            detected.stringColumn(0).append("val1");
+            detected.intColumn(1).append(1);
+            detected.stringColumn(0).append("val2");
+            detected.intColumn(1).append(2);
+            detected.stringColumn(0).append("val3");
+            detected.intColumn(1).append(3);
+            Announcement.success("hereee");
+
             if (imperfectionPattern.canRepair()) {
                 setState(NodeState.PAUSED);
             }
@@ -68,7 +79,6 @@ public class PatternNode extends Node {
         }
     }
 
-
     /**
      * The output returned depends on the current node state
      * @return if completed, the detected imperfections, else the repaired output
@@ -81,7 +91,6 @@ public class PatternNode extends Node {
         return super.getOutput();
     }
 
-
     /**
      * Sets this node back to its pre-run state
      */
@@ -91,12 +100,12 @@ public class PatternNode extends Node {
         detected = null;
     }
 
-
     /**
      * @return the table of detected results
      */
     public Table getDetected() {
         return detected;
+        // return null;
     }
 
 

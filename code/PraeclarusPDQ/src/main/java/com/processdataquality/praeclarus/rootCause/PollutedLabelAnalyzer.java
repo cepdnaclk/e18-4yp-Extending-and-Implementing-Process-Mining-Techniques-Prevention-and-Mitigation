@@ -18,8 +18,6 @@ package com.processdataquality.praeclarus.rootCause;
 
 
 import com.processdataquality.praeclarus.annotation.Plugin;
-import com.processdataquality.praeclarus.exception.InvalidOptionValueException;
-import tech.tablesaw.io.csv.CsvReadOptions;
 
 /**
  * @author Michael Adams
@@ -27,7 +25,7 @@ import tech.tablesaw.io.csv.CsvReadOptions;
  */
 @Plugin(
         name = "Polluted Label",
-        author = "Michael Adams",
+        author = "",
         version = "1.0",
         synopsis = "Loads a log file consisting of lines of comma separated values.",
         fileDescriptors = "text/csv;text/plain;.csv"
@@ -36,42 +34,7 @@ public class PollutedLabelAnalyzer extends AbstractRootCause {
 
     public PollutedLabelAnalyzer() {
         super();
-        getOptions().addDefault("Separator", ',');
-    }
-
-
-    protected CsvReadOptions getReadOptions() throws InvalidOptionValueException {
-        CsvReadOptions.Builder builder = CsvReadOptions.builder(getSource());
-        for (String key : getOptions().getChanges().keySet()) {
-            switch (key) {
-                case "Separator":
-                    builder.separator(getOptions().get("Separator").asChar());
-                    break;
-                case "Missing Value":
-                    builder.missingValueIndicator(getOptions().get("Missing Value").asString());
-                    break;
-                case "Header":
-                    builder.header(getOptions().get("Header").asBoolean());
-                    break;
-                case "Table Name":
-                    builder.tableName(getOptions().get("Table Name").asString());
-                    break;
-            }
-        }
-        return builder.build();
-    }
         
-//        return CsvReadOptions.builder(fileName)
-//                .separator(_options.get("Separator").asChar())
-//                .missingValueIndicator(_options.get("Missing Value").asString())
-////                .dateFormat(DateTimeFormatter.ofPattern((String) _options.get("Date Format")))
-////                .timeFormat(DateTimeFormatter.ofPattern((String) _options.get("Time Format")))
-////                .dateTimeFormat(DateTimeFormatter.ofPattern((String) _options.get("DateTime Format")))
-//                .header(_options.get("Header").asBoolean())
-//                .tableName(_options.get("Table Name").asString())
-////                .sampleSize((int) _options.get("Sample"))
-////                .sample(((int) _options.get("Sample")) > 0)
-//                .build();
-//    }
+    }
     
 }

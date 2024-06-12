@@ -112,7 +112,7 @@ public class RunnerButtons extends Div implements CanvasSelectionListener {
 	private void action(GraphRunner.RunnerAction runnerAction) {
 		try {
 			_runner.action(runnerAction, _selectedNode);
-			Announcement.success(_selectedNode.getLabel() + " completed successfully");
+			Announcement.success(_selectedNode.getLabel() + " completeds successfully");
 		} catch (NodeRunnerException e) {
 			try {
 				_selectedNode.reset();
