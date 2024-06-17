@@ -17,31 +17,19 @@
 package com.processdataquality.praeclarus.node;
 
 import com.processdataquality.praeclarus.exception.ReaderException;
-import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.plugin.uitemplate.PluginUI;
-import com.processdataquality.praeclarus.plugin.uitemplate.UIContainer;
-import com.processdataquality.praeclarus.plugin.uitemplate.UIForm;
-import com.processdataquality.praeclarus.plugin.uitemplate.UITable;
-import com.processdataquality.praeclarus.reader.DataReader;
 import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
 import com.processdataquality.praeclarus.ui.component.announce.Announcement;
-import com.processdataquality.praeclarus.ui.component.plugin.PluginUIDialog;
-import com.vaadin.flow.component.formlayout.FormLayout.FormItem;
-import com.processdataquality.praeclarus.ui.component.OutputPanel;
+import com.processdataquality.praeclarus.ui.component.dialog.Questions;
 
-import tech.tablesaw.api.BooleanColumn;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
-import tech.tablesaw.columns.Column;
-import tech.tablesaw.table.RollingColumn;
 
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-
-import javax.swing.JOptionPane;
 
 /**
  * A container node for a log data reader
@@ -50,196 +38,156 @@ import javax.swing.JOptionPane;
  */
 public class RootCauseAnalyzerNode extends Node {
 
-    private Table detected;
+        private List<List<String>> questionsList = new ArrayList<>();
+        private Table detected;
 
-    public RootCauseAnalyzerNode(AbstractPlugin plugin) {
-        super(plugin);
-    }
-
-    /**
-     * Reads log data from the plugin contained by this node and sets the data as
-     * the
-     * node's output
-     */
-    @Override
-    public void run() throws Exception {
-        
-        AbstractRootCause questions = (AbstractRootCause) getPlugin();
-
-        try {
-           
-            Announcement.success(questions.getName());
-            
-            if(questions.getName().compareTo("Distorted Label")==0){
-                detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
-                        StringColumn.create("Questions"),
-                        BooleanColumn.create("Answers"));
-
-                detected.stringColumn(0).append("Data Entry Interface");
-                detected.stringColumn(1).append(
-                        "Do your IT systems allow users to modify or overwrite automatically generated activity labels?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append("How is this functionality justified?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Do your data entry tools have any features to validate or warn users about potential inconsistencies when modifying activity labels?");
-                detected.booleanColumn(2).append(false);
-
-                detected.stringColumn(0).append("System Configuration");
-                detected.stringColumn(1).append("Do you have different IT systems in your process?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Do these systems use a standardized vocabulary or controlled list for activity labels?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "How are inconsistencies between different systems managed during data integration?");
-                detected.booleanColumn(2).append(false);
-
-                detected.stringColumn(0).append("Manual Data Entry");
-                detected.stringColumn(1).append(
-                        "Is any activity label information entered manually during your data collection process?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1)
-                        .append("Do different process participants use slightly different terminology or abbreviations for the same activity?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Do your data entry tools have any features to suggest or enforce a standardized vocabulary for activity labels?");
-                detected.booleanColumn(2).append(false);
-            }
-
-            else if (questions.getName().compareTo("Polluted Label")==0 ) {
-                detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
-                        StringColumn.create("Questions"),
-                        BooleanColumn.create("Answers"));
-
-                detected.stringColumn(0).append("Data Field Design");
-                detected.stringColumn(1).append(
-                        "Do your IT systems allow for recording multiple values within a single event attribute field?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append("How is this functionality justified?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Are there any plans to redesign the data capture process to separate these values into distinct attributes?");
-                detected.booleanColumn(2).append(false);
-
-                detected.stringColumn(0).append("Manual Data Entry ");
-                detected.stringColumn(1).append("Is any information in the polluted attribute fields entered manually during data collection? ");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Do different process participants use varying formats or conventions when entering data into these fields?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Do your data entry tools have any features to guide users towards consistent formatting in these fields?");
-                detected.booleanColumn(2).append(false);
-
-                
-            }
-
-            else if (questions.getName().compareTo("Synonymous Label")==0 ) {
-                detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
-                        StringColumn.create("Questions"),
-                        BooleanColumn.create("Answers"));
-
-                detected.stringColumn(0).append("Multiple Systems");
-                detected.stringColumn(1).append(
-                        "Do you use different IT systems to capture data for the process you're analyzing?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append("Do these systems use the same terminology for process steps and attributes?");
-                detected.booleanColumn(2).append(false);
-               
-
-                detected.stringColumn(0).append("System Configuration");
-                detected.stringColumn(1).append("Do your IT systems allow users to customize how they record data (e.g., labels, attributes)?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Are there any departmental or user-level configurations that might lead to variations in how the same data is recorded?");
-                detected.booleanColumn(2).append(false);
-                
-
-                detected.stringColumn(0).append("Data Transformation");
-                detected.stringColumn(1).append(
-                        "Do you have any data transformation processes (ETL) before using the data for process mining?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1)
-                        .append("Do these data transformation tools have functionalities to modify or standardize labels or attribute values?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Are these tools configured to handle synonymous labels?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "How do they handle them (e.g., mapping, merging)?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "Are data curators or analysts involved in overseeing or configuring these transformations?");
-                detected.booleanColumn(2).append(false);
-                detected.stringColumn(0).append("");
-                detected.stringColumn(1).append(
-                        "What training or guidelines are in place to ensure consistent handling of synonymous labels?");
-                detected.booleanColumn(2).append(false);
-            }
-            
-            
-            
-            Announcement.success("Please answer to the below questions to proceed !!!");
-            // FormItem item = new FormItem();
-            // item.add("item1");
-            // UIForm form = new UIForm(item);
-            // // UIForm table = new UIForm(detected);
-            // setState(NodeState.PAUSED);
-            // UIContainer tableLayout = new UIContainer();
-            // PluginUIDialog x = new PluginUIDialog(ui, null);
-            // x.setVisible(true);
-            // tableLayout.add(form);
-            // ui.add(tableLayout);
-            // updateUI(ui);
-            // // ui.add(x);
-            // questions.setUI(ui);
-
-            setOutput(detected);
-            setState(NodeState.COMPLETED);
-        } catch (Exception e) {
-
-            // see if file was loaded previously, then stored
-            String tableID = getTableID();
-            if (!(tableID == null || tableID.isEmpty())) {
-                loadOutput(tableID); // load from repo
-
-                // setState not used here because loadOutput() above sets it to completed
-                announceStateChange();
-            } else
-                throw new ReaderException(e.getMessage(), e.getCause());
+        public RootCauseAnalyzerNode(AbstractPlugin plugin) {
+                super(plugin);
         }
 
-    }
+        /**
+         * Reads log data from the plugin contained by this node and sets the data as
+         * the
+         * node's output
+         */
+        @Override
+        public void run() throws Exception {
+                //Get root cause plugin
+                AbstractRootCause questions = (AbstractRootCause) getPlugin();
 
-    @Override
-    public Table getOutput() {
-        if (getState() == NodeState.PAUSED) {
-            return detected;
+                try {
+                        //Common Questions for each imperfection pattern
+                        // Distorted Label
+                        if (questions.getName().compareTo("Distorted Label") == 0) {
+                                List<String> QList_DataEntry = new ArrayList<>();
+
+                                QList_DataEntry.add("Data Entry Interface");
+                                QList_DataEntry.add("Do your IT systems allow users to modify or overwrite automatically generated activity labels?");
+                                QList_DataEntry.add("How is this functionality justified?");
+                                QList_DataEntry.add(
+                                                "Do your data entry tools have any features to validate or warn users about potential inconsistencies when modifying activity labels?");
+                                questionsList.add(QList_DataEntry);
+
+                                List<String> QList_Config = new ArrayList<>();
+                                QList_Config.add("System Configuration");
+                                QList_Config.add("Do you have different IT systems in your process?");
+                                QList_Config.add(
+                                                "Do these systems use a standardized vocabulary or controlled list for activity labels?");
+                                QList_Config.add(
+                                                "How are inconsistencies between different systems managed during data integration?");
+                                questionsList.add(QList_Config);
+                                                List<String> QList_Manual = new ArrayList<>();
+                                QList_Manual.add("Manual Data Entry");
+                                QList_Manual.add("Is any activity label information entered manually during your data collection process?");
+                                QList_Manual.add("Do different process participants use slightly different terminology or abbreviations for the same activity?");
+                                QList_Manual.add("Do your data entry tools have any features to suggest or enforce a standardized vocabulary for activity labels?");
+                                questionsList.add(QList_Manual);
+
+                        }
+                        // Polluted Label
+                        else if (questions.getName().compareTo("Polluted Label") == 0) {
+                                List<String> QList_DataField = new ArrayList<>();
+                                QList_DataField.add( "Data Field Design");
+                                QList_DataField.add(
+                                                "Do your IT systems allow for recording multiple values within a single event attribute field?");
+                                QList_DataField.add("How is this functionality justified?");
+                                QList_DataField.add(
+                                                "Are there any plans to redesign the data capture process to separate these values into distinct attributes?");
+                                questionsList.add(QList_DataField);
+                                                List<String> QList_Manual = new ArrayList<>();
+                                QList_Manual.add( "Manual Data Entry ");
+                                QList_Manual.add(
+                                                "Is any information in the polluted attribute fields entered manually during data collection? "      );
+                                QList_Manual.add(
+                                                "Do different process participants use varying formats or conventions when entering data into these fields?");
+                                QList_Manual.add(
+                                                "Do your data entry tools have any features to guide users towards consistent formatting in these fields?");
+                                questionsList.add(QList_Manual);
+
+                        }
+                        // Synonymous Label
+                        else if (questions.getName().compareTo("Synonymous Label") == 0) {
+                                List<String> QList_Multiple = new ArrayList<>();
+                                QList_Multiple.add("Multiple Systems");
+                                QList_Multiple.add(
+                                                "Do you use different IT systems to capture data for the process you're analyzing?");
+                                QList_Multiple.add(
+                                                "Do these systems use the same terminology for process steps and attributes?"
+                                                );
+                                List<String> QList_Config = new ArrayList<>();
+                                QList_Config.add( "System Configuration");
+                                QList_Config.add(
+                                                "Do your IT systems allow users to customize how they record data (e.g., labels, attributes)?"
+                                                );
+                                QList_Config.add(
+                                                "Are there any departmental or user-level configurations that might lead to variations in how the same data is recorded?"
+                                                );
+                                List<String> QList_Data = new ArrayList<>();
+                                QList_Data.add( "Data Transformation");
+                                QList_Data.add(
+                                                "Do you have any data transformation processes (ETL) before using the data for process mining?"
+                                               );
+                                QList_Data.add(
+                                                "Do these data transformation tools have functionalities to modify or standardize labels or attribute values?"
+                                               );
+                                QList_Data.add(
+                                                "Are these tools configured to handle synonymous labels?");
+                                QList_Data.add("How do they handle them (e.g., mapping, merging)?");
+                                QList_Data.add(
+                                                "Are data curators or analysts involved in overseeing or configuring these transformations?"
+                                               );
+                                QList_Data.add(
+                                                "What training or guidelines are in place to ensure consistent handling of synonymous labels?"
+                                                );
+
+                        }
+
+                        Announcement.show("Please answer to the below questions to proceed !!!");
+                        
+                        // setState(NodeState.COMPLETED);
+                } catch (Exception e) {
+
+                        // see if file was loaded previously, then stored
+                        String tableID = getTableID();
+                        if (!(tableID == null || tableID.isEmpty())) {
+                                loadOutput(tableID); // load from repo
+
+                                // setState not used here because loadOutput() above sets it to completed
+                                announceStateChange();
+                        } else
+                                throw new ReaderException(e.getMessage(), e.getCause());
+                }
+                if (getState() == NodeState.UNSTARTED) {
+
+                        // load plugin with all incoming plugins' aux datasets
+                        questions.getAuxiliaryDatasets().putAll(getAuxiliaryInputs());
+
+                        setState(NodeState.EXECUTING);
+
+                        //Build the Questions dialog and pass the listener and questions list
+                        Questions dialog = new Questions(e -> {
+                                if (e.successful) {}
+                        }, questionsList);
+
+                        //Open the dialog 
+                        dialog.open();
+
+                }
+
         }
 
-        return detected;
-    }
+        @Override
+        public Table getOutput() {
+                if (getState() == NodeState.PAUSED) {
+                        return detected;
+                }
 
-    public void updateUI(PluginUI ui) {
-        ((AbstractRootCause) getPlugin()).setUI(ui);
+                return detected;
+        }
 
-    }
+        public void updateUI(PluginUI ui) {
+                ((AbstractRootCause) getPlugin()).setUI(ui);
+
+        }
 
 }
