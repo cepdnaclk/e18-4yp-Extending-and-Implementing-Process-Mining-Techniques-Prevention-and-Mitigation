@@ -139,15 +139,11 @@ public class GraphRunner implements NodeStateChangeListener {
 
         try {
             // check all previous have completed
-            if (node.hasCompleted()) {
-                Announcement.success("---------hiii");
-
+            if (node.hasCompleted()) {               
                 runNext(node);
             }
 
             else if (completeAllPrevious(node)) {
-                Announcement.success("hi----------ii");
-
                 start(node);
             }
         }
@@ -187,8 +183,6 @@ public class GraphRunner implements NodeStateChangeListener {
     private void start(Node node) throws Exception {
         node.addStateListener(this);
         node.runPreTask();
-        Announcement.success("BYE");
-
         node.run();
     }
 

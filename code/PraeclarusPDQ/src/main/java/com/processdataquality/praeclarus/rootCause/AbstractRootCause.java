@@ -19,6 +19,8 @@ package com.processdataquality.praeclarus.rootCause;
 import com.processdataquality.praeclarus.exception.InvalidOptionValueException;
 import com.processdataquality.praeclarus.option.FileOption;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
+import com.processdataquality.praeclarus.plugin.uitemplate.PluginUI;
+
 import org.apache.commons.io.input.ReaderInputStream;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.ReadOptions;
@@ -29,125 +31,121 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author Michael Adams
- * @date 29/4/21
+ * 
  */
 public abstract class AbstractRootCause extends AbstractPlugin implements RootCause {
 
-    protected Source _source;             // the data input source
-
+    
+    protected PluginUI _ui;
 
     protected AbstractRootCause() {
         super();
-        addDefaultOptions();
+        
     }
-
-
-    // each sub-class will have unique read options for data format etc.
-    protected abstract ReadOptions getReadOptions() throws InvalidOptionValueException;
-
 
     @Override
-    public int getMaxInputs() {
-        return 0;
+    public PluginUI getUI() {
+        return _ui;
     }
-
-
-    /**
-     * Reads data from an input source into a Table
-     * @return a Table containing the input data
-     * @throws IOException if there's a problem reading
-     */
-    @Override
-    public Table read() throws IOException {
-        return Table.read().usingOptions(getReadOptions());
-    }
-
 
     @Override
-    public void setSource(Source source) {
-        _source = source;
+    public void setUI(PluginUI ui) {
+        _ui = ui;
     }
 
 
-    @Override
-    public Source getSource() {
-        if (_source == null) {
-            throw new InvalidOptionValueException("Parameter 'Source' requires a value");
-        }
-        return _source;
-    }
+    // // each sub-class will have unique read options for data format etc.
+    // protected abstract ReadOptions getReadOptions() throws InvalidOptionValueException;
 
 
-    /**
-     * Extracts an InputStream from a Source (if possible)
-     * @return A source's InputStream
-     * @throws IOException if the source is null or an InputStream cannot be extracted
-     */
-    public InputStream getSourceAsInputStream() throws IOException {
-        Source source = getSource();
-        if (source != null) {
-            if (source.inputStream() != null) {
-                return source.inputStream(); 
-            }
-            if (source.file() != null) {
-                return new FileInputStream(source.file());
-            }
-            if (source.reader() != null) {
-                return new ReaderInputStream(source.reader(), StandardCharsets.UTF_8);
-            }
-        }
-        throw new IOException("Unable to get InputStream from Source");
-    }
+    // @Override
+    // public int getMaxInputs() {
+    //     return 0;
+    // }
 
 
-    // thw methods below set the Source object from various supported sources
-
-    public void setSource(File file) {
-        setSource(file, Charset.defaultCharset());
-    }
-
-
-    public void setSource(File file, Charset charset) {
-        setSource(new Source(file, charset));
-    }
-
-
-    public void setSource(InputStreamReader reader) {
-        setSource(new Source(reader));
-    }
+    // /**
+    //  * Reads data from an input source into a Table
+    //  * @return a Table containing the input data
+    //  * @throws IOException if there's a problem reading
+    //  */
+    // @Override
+    // public Table read() throws IOException {
+    //     return Table.read().usingOptions(getReadOptions());
+    // }
 
 
-    public void setSource(Reader reader) {
-        setSource(new Source(reader));
-    }
+    
+
+    // /**
+    //  * Extracts an InputStream from a Source (if possible)
+    //  * @return A source's InputStream
+    //  * @throws IOException if the source is null or an InputStream cannot be extracted
+    //  */
+    // public InputStream getSourceAsInputStream() throws IOException {
+    //     Source source = getSource();
+    //     if (source != null) {
+    //         if (source.inputStream() != null) {
+    //             return source.inputStream(); 
+    //         }
+    //         if (source.file() != null) {
+    //             return new FileInputStream(source.file());
+    //         }
+    //         if (source.reader() != null) {
+    //             return new ReaderInputStream(source.reader(), StandardCharsets.UTF_8);
+    //         }
+    //     }
+    //     throw new IOException("Unable to get InputStream from Source");
+    // }
 
 
-    public void setSource(InputStream inputStream) {
-        setSource(inputStream, Charset.defaultCharset());
-    }
+    // // thw methods below set the Source object from various supported sources
+
+    // public void setSource(File file) {
+    //     setSource(file, Charset.defaultCharset());
+    // }
 
 
-    public void setSource(InputStream inputStream, Charset charset) {
-        setSource(new Source(inputStream, charset));
-    }
+    // public void setSource(File file, Charset charset) {
+    //     setSource(new Source(file, charset));
+    // }
 
 
-    public void setSource(String pathOrURL) {
-        Source source;
-        try {
-            source = Source.fromUrl(pathOrURL);     // try URL first
-        }
-        catch (IOException e) {
-            source = Source.fromString(pathOrURL);  // ok, must be a file path
-        }
-        setSource(source);
-    }
+    // public void setSource(InputStreamReader reader) {
+    //     setSource(new Source(reader));
+    // }
 
 
-    protected void addDefaultOptions() {
-        getOptions().addDefaults(new CommonAnalyzerOptions().toMap());
-        getOptions().addDefault(new FileOption("Source", ""));
-    }
+    // public void setSource(Reader reader) {
+    //     setSource(new Source(reader));
+    // }
+
+
+    // public void setSource(InputStream inputStream) {
+    //     setSource(inputStream, Charset.defaultCharset());
+    // }
+
+
+    // public void setSource(InputStream inputStream, Charset charset) {
+    //     setSource(new Source(inputStream, charset));
+    // }
+
+
+    // public void setSource(String pathOrURL) {
+    //     Source source;
+    //     try {
+    //         source = Source.fromUrl(pathOrURL);     // try URL first
+    //     }
+    //     catch (IOException e) {
+    //         source = Source.fromString(pathOrURL);  // ok, must be a file path
+    //     }
+    //     setSource(source);
+    // }
+
+
+    // protected void addDefaultOptions() {
+    //     getOptions().addDefaults(new CommonAnalyzerOptions().toMap());
+    //     getOptions().addDefault(new FileOption("Source", ""));
+    // }
 
 }
