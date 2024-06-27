@@ -16,6 +16,9 @@
 
  package com.processdataquality.praeclarus.reader;
 
+ import java.io.File;
+ import java.io.IOException;
+ 
  import com.processdataquality.praeclarus.annotation.Plugin;
  import com.processdataquality.praeclarus.exception.InvalidOptionValueException;
  import tech.tablesaw.io.html.HtmlReadOptions;
@@ -25,14 +28,15 @@
   * @date 30/3/21
   */
  @Plugin(
-         name = "HTML Reader",
+         name = "Modal Reader",
          author = "Michael Adams",
          version = "1.0",
          synopsis = "Loads a log file formatted as HTML."
  )
- public class HtmlDataReader extends AbstractDataReader {
+
+ public class ModalReader extends AbstractDataReader {
  
-     public HtmlDataReader() {
+     public ModalReader() {
          super();
          getOptions().addDefault("Table Index", 0);
      }
@@ -51,4 +55,19 @@
                  .build();
      }
  
+     public static void main(String[] args) {
+        XesDataReader reader = new XesDataReader();
+        reader.setSource(new File("/Users/adamsmj/Documents/Git/contributions/praeclarus/sareh220209/updates220214/reviewing.xes"));
+        try {
+            Table t = reader.read();
+            System.out.println(t.structure());
+            System.out.println(t.summary());
+            System.out.println();
+            System.out.println(t.first(50));
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
  }
