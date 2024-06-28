@@ -56,8 +56,26 @@ public class RootCauseAnalyzerNode extends Node {
         @Override
         public void run() throws Exception {
                 AbstractRootCause questions = (AbstractRootCause) getPlugin();
+                questions.getInputs().addAll(getInputs());
+                Table master = getInputs().get(0);
+
+                Announcement.success(master.getString(1, 0));
 
                 Announcement.success(questions.getName());
+
+                Integer[] RootCauseMatrix = new Integer[9];
+
+                int[] mask = new int[9];
+                String[] RC = new String[9];
+
+                // Distorted
+                // [Q1 Q2 Q3 Q4 Q5 Q6 Q7 Q8 Q9]
+                // RC5.2 [1 1 N N N N N N N]
+                // RC5.4 [1 N 0 N N N N N N]
+                // RC3.1 [N N N 1 0 0 N N N]
+                // RC10.2[N N N N N N 1 1 N]
+                // RC5.2 [N N N N N N 1 1 N]
+                // RC5.4 [N N N N N N 1 N 0]
 
                 if (questions.getName().compareTo("Distorted Label") == 0) {
                         List<String> QList_DataEntry = new ArrayList<>();
@@ -90,6 +108,21 @@ public class RootCauseAnalyzerNode extends Node {
                         questionsList.add(QList_Manual);
 
                         questionsCount = 9;
+                        RootCauseMatrix[0] = 0b110000000;
+                        RootCauseMatrix[1] = 0b101000000;
+                        RootCauseMatrix[2] = 0b000111000;
+                        RootCauseMatrix[3] = 0b000000110;
+                        RootCauseMatrix[4] = 0b000000110;
+                        RootCauseMatrix[5] = 0b000000101;
+                        mask[1] = 0b1000000;
+                        mask[2] = 0b11000;
+                        mask[5] = 0b1;
+                        RC[0] = "RC5.2";
+                        RC[1] = "RC5.4";
+                        RC[2] = "RC3.1";
+                        RC[3] = "RC10.2";
+                        RC[4] = "RC5.2";
+                        RC[5] = "RC5.4";
 
                 }
 
@@ -114,6 +147,14 @@ public class RootCauseAnalyzerNode extends Node {
                                         "Do your data entry tools have any features to guide users towards consistent formatting in these fields?");
                         questionsList.add(QList_Manual);
                         questionsCount = 6;
+
+                        RootCauseMatrix[0] = 0b101000; // RC2.1
+                        RootCauseMatrix[1] = 0b000111; // RC10.2
+
+                        mask[0] = 0b001000;
+                        mask[1] = 0b000001;
+                        RC[0] = "RC2.1";
+                        RC[1] = "RC10.2";
 
                 }
 
@@ -151,10 +192,18 @@ public class RootCauseAnalyzerNode extends Node {
                         questionsList.add(QList_Data);
                         questionsCount = 10;
 
+                        RootCauseMatrix[0] = 0b1111000000; // RC3.1
+                        RootCauseMatrix[1] = 0b0000111010; // RC7.1
+
+                        mask[0] = 0b0100000000;
+
+                        RC[0] = "RC3.1";
+                        RC[1] = "RC7.1";
+
                 }
 
                 Announcement.success("Please answer to the below questions to proceed !!!");
-
+                
                 if (getState() == NodeState.UNSTARTED) {
 
                         // load plugin with all incoming plugins' aux datasets
@@ -176,7 +225,8 @@ public class RootCauseAnalyzerNode extends Node {
 
                         detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
                                         StringColumn.create("Questions"), BooleanColumn.create("Answers"));
-
+                        StringBuilder binaryString = new StringBuilder();
+                        
                         Thread waiterThread = new Thread(() -> {
                                 try {
                                         System.out.println("Waiting for variable to change...");
@@ -193,9 +243,33 @@ public class RootCauseAnalyzerNode extends Node {
                                                         }
 
                                                 }
-                                                for (Boolean x : dialog.getWatchedVariable()) {
-                                                        detected.booleanColumn(2).append(x);
+                                                int index = 0;
+                                                for (Boolean answer : dialog.getWatchedVariable()) {
+                                                        binaryString.append(answer ? 1 : 0);
+                                                        detected.booleanColumn(2).append(answer);
                                                 }
+                                                for (Integer entry : RootCauseMatrix) {
+
+                                                        Integer binaryNumber = Integer.parseInt(binaryString.toString(),
+                                                                        2);
+                                                        binaryNumber = binaryNumber ^ mask[index];
+                                                        Integer result = (binaryNumber & entry);
+
+                                                        if (result.equals(entry)) {
+
+                                                                Announcement.show(
+                                                                                "Root Cause Detected!! - " + RC[index]);
+
+                                                                // MessageDialog msg = new MessageDialog("Detected Root
+                                                                // Cause!! - "+RC[index]);
+                                                                // msg.addConfirmButton("OK");
+                                                                // msg.open();
+
+                                                        }
+                                                        index++;
+
+                                                }
+
                                         }).get(); // Block until the variable changes
                                         setOutput(detected);
                                 } catch (Exception e) {
