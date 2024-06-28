@@ -21,7 +21,9 @@
  
  import com.processdataquality.praeclarus.annotation.Plugin;
  import com.processdataquality.praeclarus.exception.InvalidOptionValueException;
- import tech.tablesaw.io.html.HtmlReadOptions;
+
+import tech.tablesaw.api.Table;
+import tech.tablesaw.io.html.HtmlReadOptions;
  
  /**
   * @author Michael Adams
