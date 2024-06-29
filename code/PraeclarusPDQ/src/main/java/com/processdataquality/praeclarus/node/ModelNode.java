@@ -51,19 +51,19 @@ public class ModelNode extends Node {
                 try {
                     System.out.println("Waiting for variable to change...");
 
-                    modelData.stringColumn(0).append("XX");
-                    modelData.stringColumn(1).append("YY");
-
                     dialogFuture.thenRun(() -> {
                         String filePath = modelDialog.getUploadedFilePath();
                         if (filePath != null) {
-                            System.out.println("Uploaded file path: " + filePath);
                             HtmlParserService parserService = new HtmlParserService();
 
-                            System.out.println("ClassNames ");
                             try {
                                 List<String> classNames = parserService.extractClassNames(filePath);
-                                classNames.forEach(System.out::println);
+
+                                for (String className : classNames) {
+                                    modelData.stringColumn(0).append(className);
+                                    modelData.stringColumn(1).append("count");
+                                }
+
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -72,7 +72,11 @@ public class ModelNode extends Node {
                             System.out.println("No file was uploaded.");
                         }
                         setOutput(modelData);
-    //                    setState(NodeState.COMPLETED);
+                        try {
+                            setState(NodeState.COMPLETED);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }).get(); // Block until the dialog completes
 
                     setOutput(modelData);
