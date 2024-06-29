@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class HtmlParserService {
 
     public List<String> extractClassNames(String filePath) throws IOException {
