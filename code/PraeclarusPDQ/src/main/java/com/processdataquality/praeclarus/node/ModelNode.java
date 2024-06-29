@@ -3,6 +3,7 @@ package com.processdataquality.praeclarus.node;
 import com.processdataquality.praeclarus.model.AbstractModel;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
+import com.processdataquality.praeclarus.service.HtmlParserService;
 import com.processdataquality.praeclarus.ui.component.dialog.ModelDialog;
 import com.processdataquality.praeclarus.ui.component.dialog.Questions;
 import tech.tablesaw.api.BooleanColumn;
@@ -11,6 +12,7 @@ import tech.tablesaw.api.Table;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -56,8 +58,15 @@ public class ModelNode extends Node {
                         String filePath = modelDialog.getUploadedFilePath();
                         if (filePath != null) {
                             System.out.println("Uploaded file path: " + filePath);
-                            // Process the file as needed
-//                            modelData = processFile(filePath);
+                            HtmlParserService parserService = new HtmlParserService();
+
+                            System.out.println("ClassNames ");
+                            try {
+                                List<String> classNames = parserService.extractClassNames(filePath);
+                                classNames.forEach(System.out::println);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
 
                         } else {
                             System.out.println("No file was uploaded.");
