@@ -23,6 +23,7 @@ package com.processdataquality.praeclarus.plugin;
 public enum PluginGroup {
 
     READERS,
+    MODELS,
     WRITERS,
     PATTERNS,
     ACTIONS,

@@ -17,6 +17,7 @@
 package com.processdataquality.praeclarus.node;
 
 import com.processdataquality.praeclarus.action.AbstractAction;
+import com.processdataquality.praeclarus.model.Model;
 import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.reader.DataReader;
@@ -44,6 +45,9 @@ public class NodeFactory {
         Node node = null;
         if (plugin instanceof DataReader) {
             node = new ReaderNode(plugin);
+        }
+        if (plugin instanceof Model) {
+            node = new ModelNode(plugin);
         }
         if (plugin instanceof DataWriter) {
             node = new WriterNode(plugin);
