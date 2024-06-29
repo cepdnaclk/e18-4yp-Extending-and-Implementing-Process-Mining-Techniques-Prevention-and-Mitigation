@@ -57,19 +57,19 @@ import tech.tablesaw.io.html.HtmlReadOptions;
                  .build();
      }
  
-     public static void main(String[] args) {
-        XesDataReader reader = new XesDataReader();
-        reader.setSource(new File("/Users/adamsmj/Documents/Git/contributions/praeclarus/sareh220209/updates220214/reviewing.xes"));
-        try {
-            Table t = reader.read();
-            System.out.println(t.structure());
-            System.out.println(t.summary());
-            System.out.println();
-            System.out.println(t.first(50));
-
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//     public static void main(String[] args) {
+//        XesDataReader reader = new XesDataReader();
+//        reader.setSource(new File("/Users/adamsmj/Documents/Git/contributions/praeclarus/sareh220209/updates220214/reviewing.xes"));
+//        try {
+//            Table t = reader.read();
+//            System.out.println(t.structure());
+//            System.out.println(t.summary());
+//            System.out.println();
+//            System.out.println(t.first(50));
+//
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
  }

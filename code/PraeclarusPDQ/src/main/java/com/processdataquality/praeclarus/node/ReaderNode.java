@@ -45,10 +45,26 @@ public class ReaderNode extends Node {
         setState(NodeState.EXECUTING);
 
         try {
+
+//            System.out.println("Plugin class: " + getPlugin().getClass().getName());
+
+//            if (getPlugin() instanceof ModalReader) {
+//                System.out.println("Plugin is an instance of ModalReader");
+//                ((ModalReader) getPlugin()).parseAndPrintClassNames();
+//                System.out.println(getSource().file().getAbsolutePath());
+//                ModalReader modalReader = (ModalReader) getPlugin();
+//                modalReader.parseAndPrintClassNames();
+//            }else {
+//                System.out.println("Plugin is not an instance of ModalReader");
+//
+//            }
+
+
             Table table = ((DataReader) getPlugin()).read();     // load from source
             table.setName(UUID.randomUUID().toString());
             setOutput(table);
             setState(NodeState.COMPLETED);
+
         }
         catch (Exception e) {
 

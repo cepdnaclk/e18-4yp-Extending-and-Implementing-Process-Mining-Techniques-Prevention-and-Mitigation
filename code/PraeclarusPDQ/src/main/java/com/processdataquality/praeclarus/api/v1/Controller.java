@@ -99,6 +99,11 @@ public class Controller {
         return summarisePlugins(array, "readers");
     }
 
+    @GetMapping("/modelAnalyzers")
+    String findAllModels() {
+        JsonArray array = new PluginJsonizer().jsonize(PluginService.modelAnalyzers());
+        return summarisePlugins(array, "modelAnalyzers");
+    }
 
     @GetMapping("/writers")
     String findAllWriters() {
