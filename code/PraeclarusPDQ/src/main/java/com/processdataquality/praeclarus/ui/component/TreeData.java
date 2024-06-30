@@ -63,12 +63,14 @@ public class TreeData {
         TreeItem actions = new TreeItem("Actions");
         TreeItem writers = new TreeItem("Writers");
         TreeItem rootCauseAnalyzers = new TreeItem("RootCauseAnalyzers");
+        TreeItem suggestionsWriters = new TreeItem("Suggestions");
         list.add(readers);
         list.add(models);
         list.add(patterns);
         list.add(actions);
         list.add(writers);
         list.add(rootCauseAnalyzers);
+        list.add(suggestionsWriters);
 
         // create menu items
         list.addAll(createItems(PluginService.readers(), readers));
@@ -77,6 +79,7 @@ public class TreeData {
         list.addAll(createPatternItems(PluginService.patterns(), patterns));
         list.addAll(createItems(PluginService.writers(), writers));
         list.addAll(createItems(PluginService.rootCauseAnalyzers(), rootCauseAnalyzers));
+        list.addAll(createItems(PluginService.suggestionsWriters(), suggestionsWriters));
 
         return list;
     }

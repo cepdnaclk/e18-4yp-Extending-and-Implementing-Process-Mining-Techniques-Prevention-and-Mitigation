@@ -257,6 +257,9 @@ public class WorkflowPanel extends VerticalLayout
 		if (pTypeName.equals("RootCauseAnalyzers")) {
 			instance = PluginService.rootCauseAnalyzers().newInstance(item.getName());
 		}
+		if (pTypeName.equals("Suggestions")) {
+			instance = PluginService.suggestionsWriters().newInstance(item.getName());
+		}
 		Node node = NodeFactory.create(instance);
 		showPluginProperties(node);
 		return node;
