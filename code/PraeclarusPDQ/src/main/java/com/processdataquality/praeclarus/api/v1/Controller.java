@@ -46,11 +46,11 @@ import java.util.zip.ZipFile;
 @RequestMapping("api/v1")
 public class Controller {
 
-//    private final WorkflowModelAssembler _assembler;
-//
-//    Controller(WorkflowModelAssembler assembler) {
-//        _assembler = assembler;
-//    }
+    // private final WorkflowModelAssembler _assembler;
+    //
+    // Controller(WorkflowModelAssembler assembler) {
+    // _assembler = assembler;
+    // }
 
     @GetMapping("/workflows")
     public String findAllAuthorisedWorkflows() {
@@ -58,7 +58,6 @@ public class Controller {
         List<StoredWorkflow> workflows = WorkflowStore.findPrivateOrPublic(owner);
         return summariseWorkflows(workflows);
     }
-
 
     @GetMapping("/workflows/{id}")
     public StoredWorkflow findAuthorisedWorkflow(@PathVariable String id) {
@@ -69,11 +68,10 @@ public class Controller {
         throw new WorkflowNotFoundException(id);
     }
 
-
     @PostMapping("/workflows/{id}/run")
     public String runWorkflow(@RequestBody String logFile, @RequestBody ZipFile zipFile,
-                              @PathVariable String id) {
-         StoredWorkflow workflow = findAuthorisedWorkflow(id);
+            @PathVariable String id) {
+        StoredWorkflow workflow = findAuthorisedWorkflow(id);
         Optional<Graph> optional = GraphStore.get(id);
         if (optional.isPresent()) {
             Graph graph = optional.get();
@@ -82,16 +80,15 @@ public class Controller {
             heads.forEach(head -> {
                 // if reader: (AbsDataReader.setsource()
                 // setInputs((Table) logfile
-            //    head.getPlugin().getAuxiliaryDatasets().put(unzipped zip file)
+                // head.getPlugin().getAuxiliaryDatasets().put(unzipped zip file)
             });
             GraphRunner runner = new GraphRunner(graph);
-            ///runner.run(heads.iterator().next());
+            /// runner.run(heads.iterator().next());
             // getTails, getoutputs,
         }
         // return them
         return "";
     }
-
 
     @GetMapping("/readers")
     String findAllReaders() {
@@ -99,13 +96,11 @@ public class Controller {
         return summarisePlugins(array, "readers");
     }
 
-
     @GetMapping("/writers")
     String findAllWriters() {
         JsonArray array = new PluginJsonizer().jsonize(PluginService.writers());
         return summarisePlugins(array, "writers");
     }
-
 
     @GetMapping("/actions")
     String findAllActions() {
@@ -119,20 +114,23 @@ public class Controller {
         return summarisePlugins(array, "rootCauseAnalyzers");
     }
 
+    @GetMapping("/suggestions")
+    String findAllSuggessions() {
+        JsonArray array = new PluginJsonizer().jsonize(PluginService.suggestionsWriters());
+        return summarisePlugins(array, "suggestions");
+    }
+
     @GetMapping("/patterns")
     String findAllPatterns() {
         JsonArray array = new PluginJsonizer().jsonize(PluginService.patterns());
         return summarisePlugins(array, "patterns");
     }
 
-
     @GetMapping("/patterns/groups/{group}")
     String findPatternsInGroup(@PathVariable PatternGroup group) {
         JsonArray array = new PluginJsonizer().jsonize(PluginService.patterns(), group);
         return summarisePlugins(array, group.name() + "_patterns");
     }
-
-    
 
     private String getUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -142,18 +140,16 @@ public class Controller {
         return "anonUser";
     }
 
-
     private String summariseWorkflows(List<StoredWorkflow> workflows) {
         JsonArray array = new JsonArray();
         workflows.forEach(w -> array.add(w.toSummaryJson()));
         return array.toString();
     }
 
-
     private String summarisePlugins(JsonArray array, String prefix) {
-            JsonObject object = new JsonObject();
-            object.add(prefix, array);
-            return object.toString(WriterConfig.PRETTY_PRINT);
+        JsonObject object = new JsonObject();
+        object.add(prefix, array);
+        return object.toString(WriterConfig.PRETTY_PRINT);
     }
 
 }

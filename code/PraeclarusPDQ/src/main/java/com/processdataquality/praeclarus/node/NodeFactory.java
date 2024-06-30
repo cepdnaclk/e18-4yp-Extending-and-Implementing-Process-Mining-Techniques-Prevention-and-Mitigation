@@ -22,6 +22,7 @@ import com.processdataquality.praeclarus.plugin.AbstractPlugin;
 import com.processdataquality.praeclarus.reader.DataReader;
 import com.processdataquality.praeclarus.writer.DataWriter;
 import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
+import com.processdataquality.praeclarus.suggestions.AbstractSuggestions;
 
 import java.util.UUID;
 
@@ -56,6 +57,9 @@ public class NodeFactory {
         }
         if (plugin instanceof AbstractRootCause) {
             node = new RootCauseAnalyzerNode(plugin);
+        }
+        if (plugin instanceof AbstractSuggestions) {
+            node = new SuggestionsNode(plugin);
         }
 
         return node;

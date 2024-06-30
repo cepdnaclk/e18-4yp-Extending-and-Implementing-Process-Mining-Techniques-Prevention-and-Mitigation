@@ -291,6 +291,13 @@ public class GraphRunner implements NodeStateChangeListener {
                         node.getStopWatch().getDurationAsSeconds());
             }
         }
+        if (node instanceof SuggestionsNode) {
+            if (eventType == EventType.NODE_COMPLETED) {
+                return getLogComment("suggessions wrote",
+                        node.getOutput().rowCount(),
+                        node.getStopWatch().getDurationAsSeconds());
+            }
+        }
 
         return null;
     }

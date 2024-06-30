@@ -24,6 +24,7 @@
 
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.html.HtmlReadOptions;
+import com.processdataquality.praeclarus.ui.component.announce.Announcement;
  
  /**
   * @author Michael Adams
@@ -45,6 +46,7 @@ import tech.tablesaw.io.html.HtmlReadOptions;
  
  
      protected HtmlReadOptions getReadOptions() throws InvalidOptionValueException {
+        Announcement.show(getSource().toString());
          return HtmlReadOptions.builder(getSource())
                  .missingValueIndicator(getOptions().get("Missing Value").asString())
  //                .dateFormat(DateTimeFormatter.ofPattern((String) _options.get("Date Format")))
@@ -58,6 +60,7 @@ import tech.tablesaw.io.html.HtmlReadOptions;
      }
  
      public static void main(String[] args) {
+        // Announcement.show(getSour);
         XesDataReader reader = new XesDataReader();
         reader.setSource(new File("/Users/adamsmj/Documents/Git/contributions/praeclarus/sareh220209/updates220214/reviewing.xes"));
         try {

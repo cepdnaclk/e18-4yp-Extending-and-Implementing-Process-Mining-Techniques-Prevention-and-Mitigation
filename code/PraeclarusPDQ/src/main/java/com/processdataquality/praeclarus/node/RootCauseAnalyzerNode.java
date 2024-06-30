@@ -223,8 +223,10 @@ public class RootCauseAnalyzerNode extends Node {
                         // Open the dialog
                         dialog.open();
 
-                        detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
-                                        StringColumn.create("Questions"), BooleanColumn.create("Answers"));
+                        // detected = Table.create("Questions").addColumns(StringColumn.create("Category"),
+                                        // StringColumn.create("Questions"), BooleanColumn.create("Answers"));
+                        detected = Table.create("Detected_Root_Causes").addColumns(StringColumn.create("Root_Cause"));
+                        
                         StringBuilder binaryString = new StringBuilder();
                         
                         Thread waiterThread = new Thread(() -> {
@@ -234,19 +236,19 @@ public class RootCauseAnalyzerNode extends Node {
                                                 System.out.println("Variable changed! New value: "
                                                                 + dialog.getWatchedVariable());
 
-                                                for (List<String> list : questionsList) {
+                                                // for (List<String> list : questionsList) {
 
-                                                        for (String var : list.subList(1, list.size())) {
-                                                                detected.stringColumn(0).append(list.get(0));
-                                                                detected.stringColumn(1).append(var);
+                                                //         for (String var : list.subList(1, list.size())) {
+                                                //                 detected.stringColumn(0).append(list.get(0));
+                                                //                 detected.stringColumn(1).append(var);
 
-                                                        }
+                                                //         }
 
-                                                }
+                                                // }
                                                 int index = 0;
                                                 for (Boolean answer : dialog.getWatchedVariable()) {
                                                         binaryString.append(answer ? 1 : 0);
-                                                        detected.booleanColumn(2).append(answer);
+                                                        // detected.booleanColumn(2).append(answer);
                                                 }
                                                 for (Integer entry : RootCauseMatrix) {
 
@@ -259,6 +261,7 @@ public class RootCauseAnalyzerNode extends Node {
 
                                                                 Announcement.show(
                                                                                 "Root Cause Detected!! - " + RC[index]);
+                                                                detected.stringColumn(0).append(RC[index]);
 
                                                                 // MessageDialog msg = new MessageDialog("Detected Root
                                                                 // Cause!! - "+RC[index]);

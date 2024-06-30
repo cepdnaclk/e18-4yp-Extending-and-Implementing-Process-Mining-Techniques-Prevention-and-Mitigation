@@ -21,6 +21,7 @@ import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.reader.AbstractDataReader;
 import com.processdataquality.praeclarus.writer.AbstractDataWriter;
 import com.processdataquality.praeclarus.rootCause.AbstractRootCause;
+import com.processdataquality.praeclarus.suggestions.AbstractSuggestions;
 
 /**
  * @author Michael Adams
@@ -36,6 +37,8 @@ public class PluginService {
             AbstractDataPattern.class);
     private static final PluginFactory<AbstractAction> ACTION_FACTORY = new PluginFactory<>(AbstractAction.class);
     private static final PluginFactory<AbstractRootCause> ROOT_FACTORY = new PluginFactory<>(AbstractRootCause.class);
+    private static final PluginFactory<AbstractSuggestions> SUGGESTIONS_FACTORY = new PluginFactory<>(
+            AbstractSuggestions.class);
 
     public static PluginFactory<AbstractDataReader> readers() {
         return READER_FACTORY;
@@ -56,6 +59,10 @@ public class PluginService {
     public static PluginFactory<AbstractRootCause> rootCauseAnalyzers() {
         return ROOT_FACTORY;
     }
+    
+    public static PluginFactory<AbstractSuggestions> suggestionsWriters() {
+        return SUGGESTIONS_FACTORY;
+    }
 
     public static PluginFactory<? extends AbstractPlugin> factory(Class<? extends AbstractPlugin> clazz) {
         if (AbstractDataReader.class.isAssignableFrom(clazz)) {
@@ -72,6 +79,9 @@ public class PluginService {
         }
         if (AbstractRootCause.class.isAssignableFrom(clazz)) {
             return ROOT_FACTORY;
+        }
+        if (AbstractSuggestions.class.isAssignableFrom(clazz)) {
+            return SUGGESTIONS_FACTORY;
         }
         return null;
     }
