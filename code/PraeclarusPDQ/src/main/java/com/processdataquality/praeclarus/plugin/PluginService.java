@@ -17,6 +17,7 @@
 package com.processdataquality.praeclarus.plugin;
 
 import com.processdataquality.praeclarus.action.AbstractAction;
+import com.processdataquality.praeclarus.model.AbstractModel;
 import com.processdataquality.praeclarus.pattern.AbstractDataPattern;
 import com.processdataquality.praeclarus.reader.AbstractDataReader;
 import com.processdataquality.praeclarus.writer.AbstractDataWriter;
@@ -31,6 +32,8 @@ public class PluginService {
 
     private static final PluginFactory<AbstractDataReader> READER_FACTORY = new PluginFactory<>(
             AbstractDataReader.class);
+    private static final PluginFactory<AbstractModel> MODEL_FACTORY = new PluginFactory<>(
+            AbstractModel.class);
     private static final PluginFactory<AbstractDataWriter> WRITER_FACTORY = new PluginFactory<>(
             AbstractDataWriter.class);
     private static final PluginFactory<AbstractDataPattern> PATTERN_FACTORY = new PluginFactory<>(
@@ -43,7 +46,9 @@ public class PluginService {
     public static PluginFactory<AbstractDataReader> readers() {
         return READER_FACTORY;
     }
-
+    public static PluginFactory<AbstractModel> modelAnalyzers() {
+        return MODEL_FACTORY;
+    }
     public static PluginFactory<AbstractDataWriter> writers() {
         return WRITER_FACTORY;
     }
@@ -67,6 +72,9 @@ public class PluginService {
     public static PluginFactory<? extends AbstractPlugin> factory(Class<? extends AbstractPlugin> clazz) {
         if (AbstractDataReader.class.isAssignableFrom(clazz)) {
             return READER_FACTORY;
+        }
+        if (AbstractModel.class.isAssignableFrom(clazz)) {
+            return MODEL_FACTORY;
         }
         if (AbstractDataWriter.class.isAssignableFrom(clazz)) {
             return WRITER_FACTORY;

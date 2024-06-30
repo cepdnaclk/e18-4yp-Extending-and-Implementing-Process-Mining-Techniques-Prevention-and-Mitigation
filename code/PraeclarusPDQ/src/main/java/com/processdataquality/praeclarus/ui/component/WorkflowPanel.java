@@ -242,6 +242,9 @@ public class WorkflowPanel extends VerticalLayout
 		if (pTypeName.equals("Readers")) {
 			instance = PluginService.readers().newInstance(item.getName());
 		}
+		if (pTypeName.equals("Models")) {
+			instance = PluginService.modelAnalyzers().newInstance(item.getName());
+		}
 		if (pTypeName.equals("Writers")) {
 			instance = PluginService.writers().newInstance(item.getName());
 		}
