@@ -1,4 +1,3 @@
-# !python -m spacy download en_core_web_md
 import spacy
 
 # Load NLP model with vectors
@@ -24,7 +23,11 @@ def enhance_question(question, keyword):
         if token.dep_ in ("dobj", "pobj", "nsubj", "ROOT"):
             insert_position = token.idx + len(token.text)
             break
-    enhanced_question = question[:insert_position] + f" regarding {keyword}" + question[insert_position:]
+    # Ensure the insertion is grammatically correct
+    if question[-1] in ('.', '?'):
+        enhanced_question = f"{question[:-1]} with regard to {keyword}{question[-1]}"
+    else:
+        enhanced_question = f"{question} with regard to {keyword}"
     return enhanced_question
 
 def enhance_questions_chain(questionnaire_chain, keywords):
