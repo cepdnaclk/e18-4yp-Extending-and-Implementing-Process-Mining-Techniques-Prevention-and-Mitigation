@@ -29,9 +29,21 @@ import tech.tablesaw.api.Table;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.ArrayList;
+
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
+import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.ops.transforms.Transforms;
+import java.io.File;
+import java.io.IOException;
+
+import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.ling.*;
+import edu.stanford.nlp.util.*;
+import java.util.*;
 
 /**
  * A container node for a log data reader
@@ -43,9 +55,119 @@ public class RootCauseAnalyzerNode extends Node {
         private List<List<String>> questionsList = new ArrayList<>();
         private Table detected;
         private int questionsCount = 0;
+        private static Word2Vec word2Vec;
 
         public RootCauseAnalyzerNode(AbstractPlugin plugin) {
                 super(plugin);
+        }
+
+        private static StanfordCoreNLP pipeline;
+
+        static {
+                // Initialize Stanford CoreNLP pipeline
+                Properties props = new Properties();
+                props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,depparse");
+                pipeline = new StanfordCoreNLP(props);
+        }
+
+        public static double calculateSimilarity(String sentence1, String sentence2) {
+                // Dummy similarity calculation - can be replaced with more sophisticated logic
+                return sentence1.equals(sentence2) ? 1.0 : 0.0;
+        }
+
+        public static String enhanceQuestion(String question, String keyword) {
+                Annotation doc = new Annotation(question);
+                pipeline.annotate(doc);
+                List<CoreMap> sentences = doc.get(CoreAnnotations.SentencesAnnotation.class);
+                if (sentences == null || sentences.isEmpty()) {
+                        return question;
+                }
+                CoreMap sentence = sentences.get(0);
+                int insertPosition = question.length();
+                for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
+                        if (token.tag().startsWith("NN") || token.tag().startsWith("VB")) {
+                                insertPosition = token.endPosition();
+                                break;
+                        }
+                }
+                String enhancedQuestion;
+                if (question.endsWith(".") || question.endsWith("?")) {
+                        enhancedQuestion = question.substring(0, insertPosition) + " with regard to " + keyword
+                                        + question.substring(insertPosition);
+                } else {
+                        enhancedQuestion = question + " with regard to " + keyword;
+                }
+                return enhancedQuestion;
+        }
+
+        public static List<Object> enhanceQuestionsChain(List<Object> questionnaireChain, List<String> keywords) {
+                List<Object> enhancedChain = new ArrayList<>();
+
+                for (Object mainQuestionObj : questionnaireChain) {
+                        List<Object> mainQuestion = (List<Object>) mainQuestionObj;
+                        String mainQuestionText = (String) mainQuestion.get(0);
+                        String answerType = (String) mainQuestion.get(1);
+                        List<Object> subQuestions = mainQuestion.size() > 2 ? (List<Object>) mainQuestion.get(2) : null;
+
+                        String bestKeyword = null;
+                        double bestScore = -1;
+
+                        for (String keyword : keywords) {
+                                double similarityScore = calculateSimilarity(mainQuestionText, keyword);
+                                if (similarityScore > bestScore) {
+                                        bestScore = similarityScore;
+                                        bestKeyword = keyword;
+                                }
+                        }
+
+                        String enhancedMainQuestion = bestKeyword != null
+                                        ? enhanceQuestion(mainQuestionText, bestKeyword)
+                                        : mainQuestionText;
+
+                        List<Object> enhancedMainQuestionObj = new ArrayList<>();
+                        enhancedMainQuestionObj.add(enhancedMainQuestion);
+                        enhancedMainQuestionObj.add(answerType);
+                        if (subQuestions != null) {
+                                enhancedMainQuestionObj.add(enhanceSubQuestions(subQuestions, keywords));
+                        }
+                        enhancedChain.add(enhancedMainQuestionObj);
+                }
+                return enhancedChain;
+        }
+
+        public static List<Object> enhanceSubQuestions(List<Object> subQuestions, List<String> keywords) {
+                List<Object> enhancedSubQuestions = new ArrayList<>();
+                for (Object subQuestionObj : subQuestions) {
+                        List<Object> subQuestion = (List<Object>) subQuestionObj;
+                        String subQuestionText = (String) subQuestion.get(0);
+                        String subAnswerType = (String) subQuestion.get(1);
+                        List<Object> nestedSubQuestions = subQuestion.size() > 2 ? (List<Object>) subQuestion.get(2)
+                                        : null;
+
+                        String bestSubKeyword = null;
+                        double bestSubScore = -1;
+
+                        for (String keyword : keywords) {
+                                double similarityScore = calculateSimilarity(subQuestionText, keyword);
+                                if (similarityScore > bestSubScore) {
+                                        bestSubScore = similarityScore;
+                                        bestSubKeyword = keyword;
+                                }
+                        }
+
+                        String enhancedSubQuestionText = bestSubKeyword != null
+                                        ? enhanceQuestion(subQuestionText, bestSubKeyword)
+                                        : subQuestionText;
+
+                        List<Object> enhancedSubQuestionObj = new ArrayList<>();
+                        enhancedSubQuestionObj.add(enhancedSubQuestionText);
+                        enhancedSubQuestionObj.add(subAnswerType);
+                        if (nestedSubQuestions != null) {
+                                enhancedSubQuestionObj.add(enhanceSubQuestions(nestedSubQuestions, keywords));
+                        }
+                        enhancedSubQuestions.add(enhancedSubQuestionObj);
+                }
+                return enhancedSubQuestions;
         }
 
         /**
@@ -203,7 +325,7 @@ public class RootCauseAnalyzerNode extends Node {
                 }
 
                 Announcement.success("Please answer to the below questions to proceed !!!");
-                
+
                 if (getState() == NodeState.UNSTARTED) {
 
                         // load plugin with all incoming plugins' aux datasets
@@ -280,6 +402,67 @@ public class RootCauseAnalyzerNode extends Node {
                                 }
                         });
                         waiterThread.start();
+
+                        List<String> keywords = Arrays.asList("Validate application", "Call after offers",
+                                        "Complete application",
+                                        "Handle leads", "Create Offer", "Sent (mail and online)", "Validating",
+                                        "Create Application",
+                                        "Accepted", "Cancelled", "Refused", "Denied", "Assess potential fraud",
+                                        "Shortened completion",
+                                        "Personal Loan collection");
+
+                        List<Object> questionnaireChain = Arrays.asList(
+                                        Arrays.asList(
+                                                        "Do your IT systems allow users to modify or overwrite automatically generated activity labels?",
+                                                        "Yes/No",
+                                                        Arrays.asList(
+                                                                        Arrays.asList("How is this functionality justified? (e.g., flexibility, user needs)",
+                                                                                        ""),
+                                                                        Arrays.asList(
+                                                                                        "Do your data entry tools have any features to validate or warn users about potential inconsistencies when modifying activity labels?",
+                                                                                        "Yes/No"))),
+                                        Arrays.asList("Do you have different IT systems in your process?", "Yes/No",
+                                                        Arrays.asList(Arrays.asList(
+                                                                        "Do these systems use a standardized vocabulary or controlled list for activity labels?",
+                                                                        "Yes/No"),
+                                                                        Arrays.asList(
+                                                                                        "How are inconsistencies between different systems managed during data integration? (e.g., mapping, normalization)",
+                                                                                        ""))),
+                                        Arrays.asList("Is any activity label information entered manually during your data collection process?",
+                                                        "Yes/No",
+                                                        Arrays.asList(Arrays.asList(
+                                                                        "Do different process participants use slightly different terminology or abbreviations for the same activity?",
+                                                                        "Yes/No",
+                                                                        Arrays.asList(Arrays.asList(
+                                                                                        "Provide examples of such variations.",
+                                                                                        ""))),
+                                                                        Arrays.asList(
+                                                                                        "Do your data entry tools have any features to suggest or enforce a standardized vocabulary for activity labels?",
+                                                                                        "Yes/No"))));
+
+                        List<Object> enhancedChain = enhanceQuestionsChain(questionnaireChain, keywords);
+
+                        for (Object mainQuestionObj : enhancedChain) {
+                                List<Object> mainQuestion = (List<Object>) mainQuestionObj;
+                                Announcement.show(mainQuestion.get(0) + " " + mainQuestion.get(1));
+                                if (mainQuestion.size() > 2) {
+                                        List<Object> subQuestions = (List<Object>) mainQuestion.get(2);
+                                        for (Object subQuestionObj : subQuestions) {
+                                                List<Object> subQuestion = (List<Object>) subQuestionObj;
+                                                Announcement.show(
+                                                                "  " + subQuestion.get(0) + " " + subQuestion.get(1));
+                                                if (subQuestion.size() > 2) {
+                                                        List<Object> nestedSubQuestions = (List<Object>) subQuestion
+                                                                        .get(2);
+                                                        for (Object nestedSubQuestionObj : nestedSubQuestions) {
+                                                                List<Object> nestedSubQuestion = (List<Object>) nestedSubQuestionObj;
+                                                                Announcement.show("    " + nestedSubQuestion.get(0)
+                                                                                + " " + nestedSubQuestion.get(1));
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
 
                         setOutput(detected);
 
