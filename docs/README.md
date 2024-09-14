@@ -53,6 +53,8 @@ Process mining has become a valuable tool for analyzing business processes. Howe
 
 Process mining has emerged as a powerful tool for analyzing and improving business processes by extracting insights from event logs. These logs record process execution information, serving as the foundation for discovering process models, checking conformance, and enhancing operational efficiency. However, the quality of event logs significantly impacts the reliability of process mining results.
 
+<img width="667" alt="Screenshot 2024-09-14 at 19 25 59" src="https://github.com/user-attachments/assets/c766aa4f-1350-4cd7-be87-2ea61f812922">
+
 Recent research has identified various event log imperfection patterns that hinder effective process mining. Suriadi et al.'s work on "Event log imperfection patterns for process mining" categorized common data quality issues encountered in practice. These patterns include issues such as missing information, inconsistencies, and ambiguous data entries.
 While solutions exist for some patterns, as demonstrated in "A contextual approach to detecting synonymous and polluted activity labels in process event logs," a standardized, comprehensive approach to addressing these issues has been lacking. The PraeclarusPDQ framework, currently under development, aims to capture and standardize various solutions for these imperfection patterns and other process-data quality issues.
 The Odigos framework, proposed by Emamjome et al. in "Alohomora: Unlocking data quality causes through event log context" and further explored in "Root-cause analysis of process-data quality problems," provides a structured approach for identifying the root causes of process-data quality problems. This framework forms the theoretical foundation for the current research.
@@ -66,6 +68,8 @@ Recent research by [Suriadi Suriadi, Robert Andrews, Arthur H. M. ter Hofstede, 
 This project falls under Project Type III: Process-Data Quality: Prevention and Mitigation. We will utilize the Odigos framework proposed by [Fahame Emamjome, Robert Andrews, Arthur H. M. ter Hofstede, and Hajo A. Reijers. "Alohomora: Unlocking data quality causes through event log context](EAtHR20) and further explored in [Root-cause analysis of process-data quality problems](AEtHR22). This framework provides a structured approach for identifying the root causes of process-data quality problems. We will develop a software plug-in for the PraeclarusPDQ framework specifically designed to analyze root causes of chosen event log imperfection patterns.
 
 The methodology of this project falls under "Project Type III: Process-Data Quality: Prevention and Mitigation." It employs a multi-faceted approach:
+
+<img width="834" alt="Screenshot 2024-09-14 at 19 28 38" src="https://github.com/user-attachments/assets/509e371d-4907-4380-9474-e8cc27886d1f">
 
 a) Utilization of the Odigos Framework:
 
@@ -120,6 +124,10 @@ Iterative refinement of the plug-in based on test results and expert feedback.
 
 - We will utilize sample event logs containing various event log imperfection patterns
 - The plug-in will be tested on its ability to identify root causes associated with these patterns within the event logs
+
+
+https://github.com/user-attachments/assets/7d605321-3331-488f-a380-beabd011f9c7
+
 
 ## Results and Analysis
 
